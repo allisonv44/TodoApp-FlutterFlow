@@ -6,6 +6,7 @@ import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
@@ -77,23 +78,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? TasksWidget() : LoginWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? TasksWidget() : LoginWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
         ),
         FFRoute(
           name: LoginWidget.routeName,
           path: LoginWidget.routePath,
-          builder: (context, params) => LoginWidget(),
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Login') : LoginWidget(),
         ),
         FFRoute(
           name: TasksWidget.routeName,
           path: TasksWidget.routePath,
-          builder: (context, params) => TasksWidget(),
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
         ),
         FFRoute(
           name: OnboardingWidget.routeName,
@@ -116,7 +119,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: CompletedWidget.routeName,
           path: CompletedWidget.routePath,
-          builder: (context, params) => CompletedWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Completed')
+              : CompletedWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -318,6 +323,7 @@ class FFRoute {
           return transitionInfo.hasTransition
               ? CustomTransitionPage(
                   key: state.pageKey,
+                  name: state.name,
                   child: child,
                   transitionDuration: transitionInfo.duration,
                   transitionsBuilder:
@@ -335,7 +341,8 @@ class FFRoute {
                     child,
                   ),
                 )
-              : MaterialPage(key: state.pageKey, child: child);
+              : MaterialPage(
+                  key: state.pageKey, name: state.name, child: child);
         },
         routes: routes,
       );

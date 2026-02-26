@@ -4,6 +4,8 @@ import '/components/add_task_widget.dart';
 import '/components/task_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'tasks_model.dart';
@@ -168,11 +170,58 @@ class _TasksWidgetState extends State<TasksWidget> {
                             key: Key(
                                 'Keyktv_${listViewIndex}_of_${listViewTasksRecordList.length}'),
                             tasksDocument: listViewTasksRecord,
-                            checkAction: () async {},
+                            checkAction: () async {
+                              await listViewTasksRecord.reference
+                                  .update(createTasksRecordData(
+                                completed: true,
+                              ));
+                            },
                           );
                         },
                       );
                     },
+                  ),
+                ),
+                FFButtonWidget(
+                  onPressed: () async {
+                    GoRouter.of(context).prepareAuthEvent();
+                    await authManager.signOut();
+                    GoRouter.of(context).clearRedirectLocation();
+
+                    context.goNamedAuth(LoginWidget.routeName, context.mounted);
+                  },
+                  text: 'Log out',
+                  options: FFButtonOptions(
+                    height: 40.0,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: FlutterFlowTheme.of(context).primary,
+                    textStyle:
+                        FlutterFlowTheme.of(context).labelMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontStyle,
+                              ),
+                              color: Color(0xFF14181B),
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontStyle,
+                            ),
+                    elevation: 0.0,
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(24.0),
                   ),
                 ),
               ],
